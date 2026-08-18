@@ -2,7 +2,7 @@
 
 > **A battle-tested, high-craft boilerplate for engineering software with AI coding agents (Antigravity, Claude Code, Cursor, Codex, Gemini).**
 
-This repository provides a standardized architecture for **Spec-Driven Development (SDD)**, strict multi-agent governance, visual anti-slop guidelines, test-locking guardrails, and persistent cross-session memory.
+This repository provides a standardized architecture for **Spec-Driven Development (SDD)**, strict multi-agent governance, visual anti-slop guidelines, canonical Admin CMS patterns, autonomous browser QA verification, and persistent cross-session memory.
 
 ---
 
@@ -17,13 +17,17 @@ This repository provides a standardized architecture for **Spec-Driven Developme
 │   │   ├── 002-testing-and-triangulation.mdc# TDD triangulation, zero test weakening
 │   │   ├── 003-ui-ux-craftsmanship.mdc     # Anti-slop UI tokens, spring physics, typography
 │   │   ├── 004-security-and-data-isolation.mdc# Input validation (Zod), isolation boundaries
-│   │   └── 005-api-and-contracts.mdc       # Structured API error envelopes, HTTP status rules
+│   │   ├── 005-api-and-contracts.mdc       # Structured API error envelopes, HTTP status rules
+│   │   ├── 006-admin-cms-pattern.mdc       # Standard self-management CMS architecture & schemas
+│   │   └── 007-browser-qa-verification.mdc # Autonomous browser QA (Mobile 375px & Desktop 1440px)
 │   └── skills/                             # Agent capability packs
 │       ├── spec-driven-development/        # 5-Phase SDD lifecycle skill
 │       ├── frontend-craftsmanship/         # High-craft visual and motion guidelines
 │       ├── test-driven-development/        # TDD Triangulation & test integrity
 │       └── accessibility-wcag/             # WCAG 2.2 Level AA auditing
 ├── docs/
+│   ├── ARCHITECTURE.md                     # System architecture, tech stack & data topology
+│   ├── CLIENT_REQUIREMENTS.md              # Client brief, proposal deliverables & scope boundaries
 │   ├── specs/                              # Formal functional specifications (EARS + BDD)
 │   │   ├── README.md                       # Specification authoring guide
 │   │   └── SPEC-TEMPLATE.md                # Standard spec template with REQ-XX tags
@@ -35,10 +39,15 @@ This repository provides a standardized architecture for **Spec-Driven Developme
 ├── scripts/
 │   ├── test-locking-guard.mjs              # Test assertion integrity checker (no .skip/.only)
 │   └── verify-fast.mjs                     # Pre-flight fast verification runner
+├── .github/
+│   ├── workflows/ci.yml                    # Automated GitHub Actions CI verification
+│   ├── PULL_REQUEST_TEMPLATE.md            # Pull request template with DoD checklist
+│   └── ISSUE_TEMPLATE/                     # Formal feature & bug issue templates
 ├── AGENTS.md                               # Canonical AI governance protocol & system directives
 ├── CONSTITUTION.md                         # Non-negotiable foundational system laws & boundaries
 ├── DESIGN.md                               # OKLCH design tokens, spring physics & UI anti-slop rules
 ├── PLAN.md                                 # Active session memory, dependency DAG & handoff ledger
+├── SPEC.md                                 # Executive pre-code functional contract (3-minute approval)
 └── package.json                            # Pre-configured verification scripts
 ```
 
@@ -46,56 +55,32 @@ This repository provides a standardized architecture for **Spec-Driven Developme
 
 ## 🚀 How to Use in a New or Existing Project
 
-### Option A: Initialize a New Project
-1. Clone or copy this template folder into your new project repository root:
-   ```bash
-   git clone https://github.com/your-org/ai-sdd-template.git my-new-project
-   cd my-new-project
-   ```
-2. Initialize your target technology stack (e.g. Next.js, FastAPI, Rust, Go, Flutter).
+### Option A: Initialize via GitHub Template (Recommended)
+1. Go to [`https://github.com/CEOUBB/ai-development-template`](https://github.com/CEOUBB/ai-development-template).
+2. Click **"Use this template"** $\rightarrow$ **"Create a new repository"**.
+3. Clone your new repo locally and start building.
 
-### Option B: Drop into an Existing Project
-Copy the following files and folders directly into the root of your existing codebase:
-- `.agents/`
-- `docs/`
-- `scripts/`
-- `AGENTS.md`
-- `CONSTITUTION.md`
-- `DESIGN.md`
-- `PLAN.md`
-
-Add the verification scripts to your `package.json`:
-```json
-{
-  "scripts": {
-    "verify:fast": "node scripts/verify-fast.mjs",
-    "verify:invariants": "node scripts/test-locking-guard.mjs"
-  }
-}
+### Option B: Terminal Creation via GitHub CLI
+```bash
+gh repo create my-new-project --template CEOUBB/ai-development-template --private
+cd my-new-project
 ```
 
 ---
 
-## 🤖 Prompting AI Agents to Adapt Context
+## 🤖 Prompting AI Agents: The 3-Step Initialization
 
-When starting a project with an AI agent, prompt it with the following initialization command:
+When starting a project with an AI agent, follow this 3-step sequence:
 
-> *"Please read `AGENTS.md` and `CONSTITUTION.md`. Adapt Section 1 (Mission & Institutional Boundaries) and Section 2.1 (Access Policy & SSOT location) in `AGENTS.md` to match our project's domain, stack, and business model. Keep all core universal invariants and negative constraints intact."*
+### Step 1: Ingest Client Requirements & Architecture
+> *"Read `docs/CLIENT_REQUIREMENTS.md` and `docs/ARCHITECTURE.md`. Fill out the client brief, deliverables, and technical stack for our new project."*
 
----
+### Step 2: Generate the Pre-Code Contract (`SPEC.md`)
+> *"Based on `docs/CLIENT_REQUIREMENTS.md`, generate `SPEC.md` with all data schemas (Zod), API contracts, and admin CMS field mappings. Do NOT write application code yet."*
 
-## 📜 The 5-Phase SDD Workflow
-
-1. **Phase 1: Constitution (`CONSTITUTION.md` & `AGENTS.md`)**
-   Verify all proposed architectural choices against system laws and boundaries.
-2. **Phase 2: Specify (`docs/specs/SPEC-XXX.md`)**
-   Draft formal requirements using **EARS syntax** and **Given-When-Then BDD acceptance criteria**.
-3. **Phase 3: Design (`docs/design/DESIGN-DOC-XXX.md`)**
-   Model components, Mermaid sequence flows, runtime schemas, and STRIDE security threats.
-4. **Phase 4: Tasks DAG (`PLAN.md`)**
-   Decompose work into a dependency graph with explicit `// Implements: REQ-XX` tags.
-5. **Phase 5: Execute & Verify**
-   Implement via TDD Triangulation (Red -> Green -> Refactor) and run `npm run verify:fast`.
+### Step 3: Review, Approve, and Implement
+> *(You review `SPEC.md` in 3 minutes, approve it, then prompt:)*
+> *"I have approved `SPEC.md`. Initialize `PLAN.md` with the dependency DAG and begin implementation following the 5-phase SDD pipeline."*
 
 ---
 
@@ -104,3 +89,4 @@ When starting a project with an AI agent, prompt it with the following initializ
 - **Test-Locking Invariant:** Agents cannot weaken or delete existing assertions to pass tests.
 - **Anti-Slop Design:** No flat black (`#000000`) with neon accents, no continuous gradient text fills, no generic pulsing badges.
 - **Traceability:** Every requirement has a corresponding `// Implements: REQ-XX` in code and tests.
+- **Browser QA Enforcement:** Mandatory verification on Mobile ($375\text{px}$) and Desktop ($1440\text{px}$) with 0 red console errors.

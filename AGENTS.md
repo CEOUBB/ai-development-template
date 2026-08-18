@@ -11,6 +11,7 @@
 <!-- CONTEXTUAL CONFIGURATION (To be customized per project) -->
 > **[AI AGENT INSTRUCTION: ADAPT THIS SECTION TO THE CURRENT PROJECT]**
 > Summarize the core mission, target audience, operational scale, and hard business/institutional boundaries of the application.
+> Consult `docs/CLIENT_REQUIREMENTS.md` for commercial scope, agreed deliverables, and non-goals.
 
 - **Strategic Mission:** [Define the overarching purpose and scope of this application].
 - **Scale-First Architecture:** Every data, architectural, and interface decision must be evaluated against full target production scale, not against a single-user prototype.
@@ -47,6 +48,8 @@ To optimize semantic density and prevent context drift, the following modular ru
 - `.agents/rules/003-ui-ux-craftsmanship.mdc`: Anti-slop UI tokens, optical typography, spring physics, WCAG 2.2 AA.
 - `.agents/rules/004-security-and-data-isolation.mdc`: Input validation schemas, boundary isolation, parameterized queries.
 - `.agents/rules/005-api-and-contracts.mdc`: Route handlers, contract-first API design, structured JSON error envelopes.
+- `.agents/rules/006-admin-cms-pattern.mdc`: Standard self-management CMS architecture, site content schemas, media uploads.
+- `.agents/rules/007-browser-qa-verification.mdc`: Autonomous browser QA, mobile/desktop viewport audits, console error checks.
 
 ---
 
@@ -78,6 +81,7 @@ When implementing or refactoring entities, follow the architectural patterns of 
 - **Domain Logic:** Pure business functions with 100% test coverage.
 - **Secure Mutation / API Handler:** Strict schema validation, session enforcement, atomic transaction.
 - **UI Component:** Semantic tokens consumption, accessibility attributes, reduced motion compliance.
+- **Admin CMS View:** Standard `site_content` / entity editor following `006-admin-cms-pattern.mdc`.
 
 ---
 
@@ -92,9 +96,10 @@ npm test                    # 3. Full Integration & Pre-flight Suite
 
 ### 6.2 Contractual Definition of Done (DoD)
 A task is considered complete ONLY when:
-1. Every requirement `REQ-XX` from the specification carries its code-level traceability marker `// Implements: REQ-XX`.
+1. `SPEC.md` or `docs/specs/SPEC-XXX.md` is approved and all implemented requirements carry `// Implements: REQ-XX`.
 2. Type checking and linting terminate with exit code `0` (zero errors, zero warnings).
 3. All unit and integration tests pass with zero test assertions modified or weakened in test suites.
 4. Security invariants, schema boundaries, and single-source-of-truth rules remain fully intact.
 5. Database queries and API endpoints implement strict limits and bounded pagination.
-6. `PLAN.md` is updated with active status and structured handoff notes.
+6. Browser QA verification passed with zero red console errors and verified Mobile (375px) + Desktop (1440px) viewports.
+7. `PLAN.md` is updated with active status and structured handoff notes.

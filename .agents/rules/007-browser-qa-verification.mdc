@@ -1,0 +1,35 @@
+---
+description: Autonomous browser QA verification, viewport audits (Mobile 375px, Desktop 1440px), and console error checks
+globs: ["app/**/*", "src/**/*", "components/**/*", "views/**/*"]
+---
+
+# 007 — Autonomous Browser QA & Visual Verification
+
+## Purpose
+Ensures that all user interface implementations and visual changes are thoroughly validated in real browser rendering environments before any task is marked as complete.
+
+---
+
+## 1. Mandatory Viewport Verification Matrix
+
+When building or modifying UI pages, components, or layouts, the agent must verify visual rendering across two standard viewports:
+
+| Viewport Target | Width $\times$ Height | Mandatory Checks |
+| :--- | :--- | :--- |
+| **Mobile Standard** | $375\text{px} \times 812\text{px}$ (iPhone SE / Standard Mobile) | - Zero horizontal scrollbar (`overflow-x: hidden`).<br>- Touch targets $\ge 44 \times 44\text{px}$.<br>- Hamburger / Mobile drawer opens smoothly.<br>- Text fits within screen bounds without truncation. |
+| **Desktop Standard** | $1440\text{px} \times 900\text{px}$ (Standard Desktop) | - Balanced whitespace and maximum content container width.<br>- Multi-column grids render with proper gap spacing.<br>- Hover states activate correctly. |
+
+---
+
+## 2. Browser Verification Protocol
+
+Before declaring any frontend task done, execute this automated or browser inspection sequence:
+
+1. **Local Server Verification:** Ensure the development or preview server runs cleanly without compilation errors.
+2. **Console Error Audit:** Open the target route and inspect browser console logs.
+   - **Zero Red Errors:** There must be $0$ unhandled exceptions, hydration mismatches, missing React keys, or broken network 404s.
+3. **Interactive Flow Check:**
+   - Test form submissions (valid submission produces success toast/modal; invalid submission highlights errors).
+   - Test modal dialogs, drawers, and dropdown toggles.
+   - Test keyboard navigation (`Tab` cycle through interactive elements).
+4. **Visual Artifact Documentation:** When possible or requested, capture screenshot evidence of the rendered interface at both mobile and desktop viewports.
