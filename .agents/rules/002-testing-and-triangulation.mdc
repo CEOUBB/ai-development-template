@@ -1,0 +1,20 @@
+---
+description: Test-driven development, triangulation discipline, and test-locking protection
+globs: ["tests/**/*", "**/*.test.*", "**/*.spec.*"]
+---
+
+# 002 — Testing & Triangulation Discipline
+
+## 1. Zero Test Weakening (Test-Locking Invariant)
+- You are strictly prohibited from weakening assertions, deleting test cases, adding `.skip()`, or widening numeric ranges in existing tests to bypass test failures.
+- If a test fails, fix the underlying production code to satisfy the contract.
+
+## 2. TDD Triangulation
+- Write tests in pairs:
+  1. Happy path (valid input produces expected valid output).
+  2. Boundary / Failure path (invalid, empty, overflow, or unauthorized input produces structured error).
+- Assert explicit outputs, not just non-null or truthy values.
+
+## 3. Deterministic Tests
+- Never rely on real clocks or random numbers without deterministic mocking or seeding.
+- Keep unit test suites execution time under 3 seconds.

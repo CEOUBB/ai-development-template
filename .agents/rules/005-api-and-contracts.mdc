@@ -1,0 +1,31 @@
+---
+description: API route handlers, contract-first design, and structured JSON response schemas
+globs: ["app/api/**/*", "src/api/**/*", "routes/**/*", "controllers/**/*"]
+---
+
+# 005 — API & Contract Standards
+
+## 1. Structured JSON Error Envelopes
+All error responses MUST conform to a predictable schema:
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Human-readable explanation of error",
+    "details": []
+  }
+}
+```
+
+## 2. HTTP Status Code Discipline
+- `200 OK`: Successful retrieval or update.
+- `201 Created`: Successful entity creation.
+- `400 Bad Request`: Malformed syntax.
+- `401 Unauthorized`: Unauthenticated caller.
+- `403 Forbidden`: Authenticated caller lacks permission.
+- `404 Not Found`: Entity does not exist.
+- `422 Unprocessable Entity`: Schema validation failure.
+- `500 Internal Server Error`: Unhandled server exception.
+
+## 3. Idempotency & Mutations
+- State-modifying operations (POST, PUT, DELETE, PATCH) should support idempotency keys where critical transactions are executed.

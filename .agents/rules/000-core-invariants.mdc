@@ -1,0 +1,18 @@
+---
+description: Universal core invariants, strict typing, zero placeholders, and bounded query requirements
+globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.py", "**/*.go", "**/*.rs"]
+---
+
+# 000 — Core Invariants & Strict Quality Constraints
+
+## 1. Zero Placeholders & Truncated Code
+- NEVER emit code containing `// TODO`, `/* rest of code */`, `// ...`, or partial diff snippets.
+- Every generated file, function, and test must be complete, functional, and compilable immediately.
+
+## 2. Strict Type Safety & No Bypasses
+- NEVER use `any`, `@ts-ignore`, `@ts-nocheck`, or blind type assertions (`as unknown as T`).
+- Always validate external inputs using deterministic runtime parsers (Zod, Valibot, Pydantic, etc.).
+
+## 3. Strict Query Bounding
+- NEVER execute unbounded database queries (`SELECT *` without `.limit()`).
+- All collection scans, search queries, and table reads must define explicit pagination limits (default $\le 50$) and indexed sort orders.

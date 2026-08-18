@@ -1,0 +1,20 @@
+{
+  "name": "ai-sdd-template",
+  "version": "1.0.0",
+  "description": "Enterprise-grade Spec-Driven Development (SDD) starter template for AI-assisted engineering",
+  "type": "module",
+  "scripts": {
+    "verify:fast": "node scripts/verify-fast.mjs",
+    "verify:invariants": "node scripts/test-locking-guard.mjs",
+    "test": "node scripts/verify-fast.mjs"
+  },
+  "keywords": [
+    "sdd",
+    "spec-driven-development",
+    "ai-agent",
+    "governance",
+    "testing",
+    "anti-slop"
+  ],
+  "license": "MIT"
+}

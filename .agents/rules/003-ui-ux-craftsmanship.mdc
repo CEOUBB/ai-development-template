@@ -1,0 +1,24 @@
+---
+description: High-craft UI design, token governance, anti-slop, spring physics, and WCAG 2.2 accessibility
+globs: ["**/*.tsx", "**/*.jsx", "**/*.vue", "**/*.svelte", "**/*.css", "**/*.scss"]
+---
+
+# 003 — UI/UX Craftsmanship & Anti-Slop Directives
+
+## 1. Visual Slop Prohibition
+- DO NOT use flat `#000000` backgrounds with saturated neon accents (`violet-500`, `indigo-500`).
+- DO NOT use multi-color continuous gradient text fills (`bg-clip-text text-transparent`).
+- DO NOT use pulsing pill badges (`animate-ping`) or decorative emojis in component iconography.
+- DO NOT use oversized diffuse glowing shadows (`blur-3xl`).
+
+## 2. Design Tokens & Elevation
+- Consume semantic tokens from `DESIGN.md` (`var(--surface-base)`, `var(--surface-raised)`, `var(--text-primary)`).
+- Elevate components using 1px micro-borders and layered ambient shadows.
+
+## 3. Motion & Animation Physics
+- Never use generic `transition: all 0.3s ease`.
+- Target exact animated properties (`transform`, `opacity`) with critically damped spring physics (`stiffness: 340, damping: 28`) or micro-times ($\le 150\text{ms}$).
+- Wrap interactive animations in `prefers-reduced-motion` fallbacks.
+
+## 4. Typography & Numerals
+- Always apply `font-variant-numeric: tabular-nums lining-nums` (`.num`, `.tabular-nums`) to tables, financial amounts, counters, and dates.

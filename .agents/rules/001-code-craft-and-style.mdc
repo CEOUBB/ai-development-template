@@ -1,0 +1,20 @@
+---
+description: Code craftsmanship, naming conventions, comment preservation, and clean architecture
+globs: ["**/*"]
+---
+
+# 001 — Code Craftsmanship & Style Standards
+
+## 1. Documentation & Comment Integrity
+- Preserve existing comments, docstrings, and architectural explanations unless they are directly made obsolete by your change.
+- Never strip explanatory context to reduce response token count.
+
+## 2. Requirement Traceability
+- Every non-trivial function, handler, schema, or component that fulfills a requirement from `docs/specs/` MUST include the traceability annotation:
+  ```typescript
+  // Implements: REQ-XX
+  ```
+
+## 3. Pure Domain Isolation
+- Business calculations, validation logic, and authorization rules must remain pure and free from direct I/O or UI rendering side-effects.
+- Keep domain logic easily testable in memory without requiring mocks.

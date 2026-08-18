@@ -1,0 +1,18 @@
+---
+description: Security invariants, boundary isolation, input validation, and credential protection
+globs: ["**/*"]
+---
+
+# 004 — Security & Data Isolation
+
+## 1. Zero Credential Leakage
+- Never log authorization tokens, passwords, cookies, or PII to console or telemetry.
+- Never hardcode personal addresses or secret keys into source code or security rules.
+
+## 2. Runtime Schema Validation
+- All boundary inputs (HTTP request bodies, query params, headers, webhooks, environment variables) MUST be validated with a strict runtime schema parser (e.g. Zod) before being processed.
+- Discard or reject unknown/extra fields by default (`.strict()` parsing).
+
+## 3. Multi-Tenant & Session Isolation
+- Always enforce tenant and user boundaries at the data query level (e.g. `WHERE tenant_id = ? AND user_id = ?`).
+- Prohibit wildcard administrative reads from public-facing endpoints.
