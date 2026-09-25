@@ -1,47 +1,126 @@
 ---
 name: spec-driven-development
-description: Master skill for Spec-Driven Development (SDD) Enterprise. Enforces the 5-phase contract pipeline (Constitution -> Specify -> Design -> Tasks -> Execute & Verify) with EARS syntax, BDD criteria, and traceability.
+description: Master skill for Spec-Driven Development (SDD) Enterprise unified with OpenSpec. Use when designing, refactoring, or building non-trivial features, APIs, data models, or quality remediations. Enforces the 5-phase contract pipeline (Explore -> Propose -> Design & Task -> Apply/TDD -> Verify & Archive) with living system specifications in openspec/specs/, formal EARS syntax, BDD Given-When-Then criteria, SHA-256 Test-Locking guards, TDD Triangulation, and automated CLI validation (openspec validate).
+version: "5.0.0"
 ---
 
-# Spec-Driven Development (SDD) Enterprise
+# Spec-Driven Development (SDD) Enterprise + OpenSpec
 
-## Purpose
-Enforces the 5-phase contract pipeline for building reliable, maintainable software systems with AI agents.
+Spec-Driven Development elevates machine-readable specifications to the primary source of truth in the software engineering lifecycle. **The formal specification precedes, constrains, guides, and validates all implementation.**
 
-```mermaid
-graph LR
-    P1[Phase 1: Constitution] --> P2[Phase 2: Specify]
-    P2 --> P3[Phase 3: Design]
-    P3 --> P4[Phase 4: Tasks DAG]
-    P4 --> P5[Phase 5: Execute & Verify]
+In SDD Enterprise with OpenSpec, living domain specifications in `openspec/specs/` document the current canonical truth of the system, while atomic delta proposals in `openspec/changes/<change-id>/` encapsulate in-flight features until merged and archived.
+
+---
+
+## 1. Core Principles & Guardrails
+
+1. **Spec First, Code Second:** Generating implementation code for non-trivial features, migrations, or cross-cutting refactors without an approved change proposal in `openspec/changes/` or living spec in `openspec/specs/` is strictly prohibited.
+2. **Living Specifications (SSOT):** Domain specifications in `openspec/specs/<domain>/spec.md` constitute the persistent source of truth. When changes are completed, `openspec archive <change-id>` synchronizes the delta into the living specs.
+3. **Formal EARS Syntax:** All functional requirements MUST be formulated using one of the 5 canonical EARS patterns with RFC 2119 keywords (`MUST`, `SHALL`, `SHOULD`).
+4. **Binding BDD Acceptance Criteria:** Every functional requirement MUST be linked to formal `Given-When-Then` (Gherkin) scenarios, mapped $1:1$ to executable test assertions.
+5. **Deterministic Test-Locking (SHA-256 Guard):** During the execution/implementation phase (GREEN), test files in `tests/` are in **read-only mode**. The verification harness verifies file integrity hashes via `scripts/verify-test-hashes.mjs`.
+6. **Mandatory TDD Triangulation:** The agent must document the RED phase (expected assertion failure trace), the GREEN phase (minimal business logic to pass the test), and the REFACTOR phase (code optimization maintaining green status).
+7. **No Test Weakening:** Agents are strictly forbidden from relaxing assertions, deleting tests, adding `.skip()`, or widening tolerance thresholds to force a build to pass. If a test fails, the defect resides in the implementation code or demands a formal specification amendment.
+8. **Bidirectional Code Traceability:** Every introduced function, route handler, or schema MUST include a code-level traceability marker `// Implements: REQ-XX`.
+9. **Automated CLI Validation:** Every proposal and living spec must pass `openspec validate --specs` (included in `pnpm run verify:fast`).
+
+---
+
+## 2. The Unified 5-Phase SDD + OpenSpec Pipeline
+
+```
+Phase 0: Explore & Constitution (/opsx:explore + AGENTS.md + openspec/specs/)
+   │
+   ▼
+Phase 1: Formal Proposal & Specs (/opsx:propose <name> -> proposal.md + specs/)
+   │  [STAGE GATE 1: Requirements Review & Approval (EARS + BDD)]
+   ▼
+Phase 2: Technical Design & Architecture (design.md -> Schemas, Mermaid, Blast Radius)
+   │  [STAGE GATE 2: Architecture Review & Approval]
+   ▼
+Phase 3: Task Decomposition & DAG (tasks.md -> Ordered Atomic Checkboxes)
+   │  [STAGE GATE 3: Task Ordering & Scope Approval]
+   ▼
+Phase 4: Incremental TDD Execution (/opsx:apply -> RED -> GREEN -> REFACTOR -> [x])
+   │
+   ▼
+Phase 5: Automated Verification & Archive (verify:fast + pnpm test + openspec archive)
+```
+
+### 2.1 Specification Lifecycle States
+
+| Status | Meaning | Set By |
+| :--- | :--- | :--- |
+| `BORRADOR / PROPOSED` | Change proposal under construction in `openspec/changes/`. No business code may be written. | Agent / Architect |
+| `APROBADA` | Requirements, technical design, and DAG tasks approved. Ready for TDD setup. | Human approval / Recorded by agent |
+| `EN EJECUCION / APPLY` | Phase 4 in progress; DAG tasks executing and passing test-locked verification. | Agent |
+| `VERIFICADA & ARCHIVADA` | Phase 5 completed: full test suite green, zero lint warnings, spec archived into `openspec/specs/`. | Agent after `openspec archive` |
+
+---
+
+## 3. Requirements Engineering with EARS Syntax
+
+All functional requirements MUST conform to one of the following formal patterns:
+
+| EARS Pattern | Formal Syntax | Primary Use Case | Example |
+| :--- | :--- | :--- | :--- |
+| **Ubiquitous** | *The \<system\> SHALL \<response\>.* | Fundamental, continuous invariants. | `REQ-01: The system SHALL persist all transactional records in the primary database within an ACID transaction.` |
+| **Event-Driven** | *WHEN \<trigger\>, the \<system\> SHALL \<response\>.* | Direct responses to discrete actions. | `REQ-02: WHEN an administrator updates permissions, the system SHALL emit an append-only audit log entry.` |
+| **State-Driven** | *WHILE \<state\>, the \<system\> SHALL \<response\>.* | Behavior active only during a state. | `REQ-03: WHILE a workspace is archived, the system SHALL enforce read-only access on all endpoints.` |
+| **Unwanted Behavior** | *IF \<condition\>, THEN the \<system\> SHALL \<response\>.* | Error handling, edge cases, and limits. | `REQ-04: IF an unauthorized token signs in, THEN the system SHALL reject authentication with HTTP 403.` |
+| **Optional Feature** | *WHERE \<feature\>, the \<system\> SHALL \<response\>.* | Platform-specific or flagged features. | `REQ-05: WHERE running on mobile Capacitor, the system SHALL invoke native haptic feedback.` |
+| **Complex** | *WHILE \<state\>, WHEN \<trigger\>, the \<system\> SHALL \<response\>.* | Compound pre-conditions and events. | `REQ-06: WHILE offline, WHEN a user views cached records, the client SHALL serve content from local cache.` |
+
+---
+
+## 4. BDD Acceptance Criteria (Gherkin Scenarios)
+
+Every EARS requirement is accompanied by executable Gherkin scenarios:
+
+```gherkin
+Scenario: Authenticated operator submits validated resource payload
+  Given an authenticated user with role "Operator"
+  And the user has active write access to workspace "WS-2026-01"
+  When they submit a POST request to "/api/workspaces/resources" with a valid payload
+  Then the response status code must be 201
+  And a record must be persisted in the primary database under "WS-2026-01"
 ```
 
 ---
 
-## 1. Phase 1: Constitution & Invariants
-- Verify that requirements comply with `CONSTITUTION.md` and `AGENTS.md`.
-- Reject any request that violates privacy, security boundaries, or SSOT rules.
+## 5. Test-Locking & TDD Triangulation Safeguards
 
-## 2. Phase 2: Specify (`docs/specs/SPEC-XXX.md`)
-- Create formal specifications using EARS syntax:
-  - **Ubiquitous:** "The system shall..."
-  - **Event-Driven:** "When <trigger>, the system shall..."
-  - **State-Driven:** "While <state>, the system shall..."
-  - **Error:** "If <condition>, then the system shall..."
-  - **Optional:** "Where <flag>, the system shall..."
-- Define BDD acceptance scenarios (`Given-When-Then`) for every requirement (`REQ-XX`).
+### 5.1 Test-Locking Protocol
+1. During the RED phase, the agent creates test files in `tests/` modeling the BDD criteria.
+2. Run `node scripts/verify-test-hashes.mjs --generate` to record cryptographic SHA-256 snapshots in `.agents/.test-hashes.json`.
+3. During the GREEN phase, the agent implements business logic in `lib/`, `app/`, or `backend/`.
+4. The verification gate (`pnpm run verify:fast`) automatically validates that test assertions remain intact.
 
-## 3. Phase 3: Technical Design (`docs/design/DESIGN-DOC-XXX.md`)
-- Author Mermaid sequence and topology diagrams.
-- Define runtime schemas and database indexing strategies.
-- Complete STRIDE threat analysis.
+### 5.2 Test Failure Recovery Algorithm
+When a test fails during verification:
+- **Case 1: Implementation does not satisfy the specification.** $\rightarrow$ Fix implementation in `app/`, `lib/`, or `backend/`.
+- **Case 2: Test contains a defect and does not reflect approved BDD.** $\rightarrow$ Correct the test, document rationale, and regenerate hashes.
+- **Case 3: Approved specification is contradictory.** $\rightarrow$ **STOP.** Request human review before altering test code.
 
-## 4. Phase 4: Tasks & Memory Decomposition (`PLAN.md`)
-- Break feature down into a Dependency DAG.
-- Fill the TDD Triangulation Matrix.
-- Include requirement tags (`// Implements: REQ-XX`) on each task.
+---
 
-## 5. Phase 5: Execute & Verify
-- Execute TDD cycles (Red -> Green -> Refactor).
-- Run fast verification: `npm run verify:fast`.
-- Run test-locking guard to verify zero test weakening.
+## 6. OpenSpec Agent Commands Quick Reference
+
+| Command | Action |
+| :--- | :--- |
+| `/opsx:explore` | Interactive brainstorming and technical trade-offs evaluation before writing artifacts. |
+| `/opsx:propose <name>` | Generate structured change proposal in `openspec/changes/<name>/` (`proposal.md`, `specs/`, `design.md`, `tasks.md`). |
+| `/opsx:apply` | Incrementally execute tasks in `tasks.md` following TDD and SHA-256 test-locking. |
+| `openspec validate --specs` | Validate syntax and structure of living specifications. |
+| `openspec archive <name>` | Archive completed change and merge delta specifications into canonical `openspec/specs/`. |
+
+---
+
+## 7. Phase 5 Definition of Done (DoD)
+
+A task is complete and marked as `VERIFICADA` only when:
+1. `pnpm run verify:fast`, `pnpm run qa:check`, and `pnpm test` pass with exit code `0` (zero errors, zero warnings).
+2. Every requirement `REQ-XX` is mapped to an `// Implements: REQ-XX` (or `# Implements: REQ-XX`) code marker.
+3. OpenSpec specifications pass validation (`openspec validate --specs`).
+4. `qa/catalog.ts` and `qa/state-catalog.ts` are updated with the new/modified scenarios and semantic states.
+5. The specification status is updated and `PLAN.md` records the structured handoff.

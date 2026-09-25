@@ -1,20 +1,13 @@
 ---
-description: Code craftsmanship, naming conventions, comment preservation, and clean architecture
-globs: ["**/*"]
+description: "Code style, early returns, error propagation, and language standards for TypeScript and Python"
+globs: "**/*.{ts,tsx,js,mjs,py,go,rs,css}"
+alwaysApply: false
 ---
 
-# 001 — Code Craftsmanship & Style Standards
+# Governance Rule 001: Code Craft & Modern Idioms
 
-## 1. Documentation & Comment Integrity
-- Preserve existing comments, docstrings, and architectural explanations unless they are directly made obsolete by your change.
-- Never strip explanatory context to reduce response token count.
-
-## 2. Requirement Traceability
-- Every non-trivial function, handler, schema, or component that fulfills a requirement from `docs/specs/` MUST include the traceability annotation:
-  ```typescript
-  // Implements: REQ-XX
-  ```
-
-## 3. Pure Domain Isolation
-- Business calculations, validation logic, and authorization rules must remain pure and free from direct I/O or UI rendering side-effects.
-- Keep domain logic easily testable in memory without requiring mocks.
+1. **Early Returns & Flat Control Flow:** Prefer guard clauses and early returns over deeply nested conditionals. Leave an empty line before `if`, `for`, `while`, and `try` blocks.
+2. **Typed Error Propagation:** Throw typed domain errors in lower layers; only log via `console.error` / structured logger at the top-level route or CLI boundary.
+3. **Modern Runtimes:**
+   - **Node 22+ / TypeScript:** Use built-in `process.loadEnvFile(path)` (never install `dotenv`), `Object.groupBy`, `Map.groupBy`, `Promise.withResolvers`, and Set operations.
+   - **Python 3.12+:** Use native type parameters (`type X = ...`, `list[str]`, `T | None`), `pathlib.Path`, Pydantic v2 models, and `ruff` formatting.

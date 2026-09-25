@@ -1,31 +1,11 @@
 ---
-description: API route handlers, contract-first design, and structured JSON response schemas
-globs: ["app/api/**/*", "src/api/**/*", "routes/**/*", "controllers/**/*"]
+description: "API route handlers, Zod/Pydantic validation, and structured error envelopes"
+globs: "app/api/**,api/**,routes/**,backend/**"
+alwaysApply: false
 ---
 
-# 005 — API & Contract Standards
+# Governance Rule 005: API & Contracts
 
-## 1. Structured JSON Error Envelopes
-All error responses MUST conform to a predictable schema:
-```json
-{
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Human-readable explanation of error",
-    "details": []
-  }
-}
-```
-
-## 2. HTTP Status Code Discipline
-- `200 OK`: Successful retrieval or update.
-- `201 Created`: Successful entity creation.
-- `400 Bad Request`: Malformed syntax.
-- `401 Unauthorized`: Unauthenticated caller.
-- `403 Forbidden`: Authenticated caller lacks permission.
-- `404 Not Found`: Entity does not exist.
-- `422 Unprocessable Entity`: Schema validation failure.
-- `500 Internal Server Error`: Unhandled server exception.
-
-## 3. Idempotency & Mutations
-- State-modifying operations (POST, PUT, DELETE, PATCH) should support idempotency keys where critical transactions are executed.
+1. **Boundary Schema Validation:** Parse every request body, query parameter, and path segment with Zod (TypeScript) or Pydantic v2 (Python) before executing domain logic.
+2. **Deterministic Error Envelopes:** Return structured JSON errors (`{ error: { code, message } }`) with accurate HTTP status codes (`400`, `401`, `403`, `404`, `409`, `422`, `429`, `500`). Never leak raw stack traces or database internals to clients.
+3. **Idempotency & Reentrancy:** Protect mutating endpoints and UI action handlers against concurrent double-submissions.

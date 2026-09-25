@@ -1,109 +1,73 @@
-# DESIGN.md — Visual Design Tokens & High-Craft Governance
-
-> **STATUS:** CANONICAL DESIGN SYSTEM & ANTI-SLOP SPECIFICATION
-> Governs visual hierarchy, color spaces, surface elevation, optical typography, animation physics, and accessibility.
-
+---
+name: Enterprise High-Craft Design System
+description: Editorial clarity with calibrated OKLCH surfaces, optical typography pairing, and critically damped spring physics.
+colors:
+  primary: "oklch(0.48 0.18 255)"
+  primary-active: "oklch(0.38 0.16 255)"
+  navy: "oklch(0.24 0.09 255)"
+  primary-wash: "rgba(0, 85, 184, 0.07)"
+  canvas: "oklch(0.975 0.005 240)"
+  canvas-soft: "oklch(0.975 0.005 240)"
+  surface: "#ffffff"
+  ink: "oklch(0.2 0.03 260)"
+  ink-secondary: "oklch(0.36 0.03 255)"
+  ink-muted: "oklch(0.48 0.03 250)"
+  hairline: "oklch(0.9 0.012 250)"
+  emerald: "oklch(0.7 0.17 155)"
+  gold: "oklch(0.75 0.16 75)"
+  red: "oklch(0.55 0.22 25)"
+typography:
+  page-title:
+    fontFamily: 'Merriweather, "Iowan Old Style", Georgia, serif'
+    fontSize: "clamp(27px, 2.6vw, 36px)"
+    fontWeight: 700
+    lineHeight: 1.22
+    letterSpacing: "-0.035em"
+  section-title:
+    fontFamily: 'Merriweather, "Iowan Old Style", Georgia, serif'
+    fontSize: "21px"
+    fontWeight: 700
+    lineHeight: 1.35
+  body:
+    fontFamily: 'Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 1.5
+  button:
+    fontFamily: "Manrope, sans-serif"
+    fontSize: "13px"
+    fontWeight: 600
+  metadata:
+    fontFamily: "Manrope, sans-serif"
+    fontSize: "12px"
+    lineHeight: 1.6
+rounded:
+  xs: "4px"
+  sm: "5px"
+  md: "8px"
+  lg: "12px"
+  xl: "16px"
+  full: "9999px"
+spacing:
+  xxs: "4px"
+  xs: "8px"
+  sm: "12px"
+  md: "16px"
+  lg: "24px"
+  xl: "32px"
+  section: "64px"
 ---
 
-## 1. Anti-Slop Visual Commandments
+# Design System & Anti-Slop Governance (`DESIGN.md`)
 
-Every AI coding agent MUST obey the following visual design constraints:
+## 1. Visual Philosophy & Surface Hierarchy
 
-1. **No Pitch-Black / Flat Black Backgrounds:** Do not use `#000000`, `bg-black`, or `bg-zinc-950` with high-saturation neon accents (`violet-500`, `cyan-400`, `fuchsia-500`). Use warm, multi-stop luminance neutral tokens (`bg-surface-base`, `bg-surface-raised`).
-2. **No Saturated Glows or Gradients on Borders:** Do not use `box-shadow: 0 0 50px rgba(139, 92, 246, 0.5)` or continuous rainbow/gradient borders. Use refined micro-borders (`1px solid var(--border-subtle)`) and layered ambient micro-shadows.
-3. **No Continuous Text Gradients:** Avoid `bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent` on long paragraphs or subheadings. Reserve subtle gradients strictly for key brand wordmarks when explicitly requested.
-4. **No Pulsating Pill Badges:** Do not use pulsing colored dots (`animate-ping`) on badge pills above headlines.
-5. **No Decorative Emoji Icons:** Do not use decorative emojis (✨, 🚀, 🔥, ⚡) as UI component icons. Use dedicated icon vectors from a single cohesive icon library.
+- **Calibrated OKLCH Luminance:** Build hierarchy through subtle surface shifts (`canvas` vs `surface`) and `1px` hairline borders (`oklch(0.9 0.012 250)`), never via heavy drop shadows or glowing neon borders.
+- **Single Structural Accent:** Reserve `primary` strictly for primary interactive actions, active navigation states, and focus rings.
+- **Tabular Numerals:** Apply `.num` (`font-variant-numeric: tabular-nums lining-nums`) to all tables, metrics, prices, grades, counters, and dates.
 
----
+## 2. Motion & Accessibility (WCAG 2.2 AA)
 
-## 2. Color System & Surface Elevation (OKLCH)
-
-We design with perceptually uniform color spaces (OKLCH / CSS Color Module Level 4) for predictable luminance and contrast.
-
-### 2.1 Surface Tokens
-```css
-:root {
-  /* Neutral surfaces (Light mode) */
-  --surface-base: oklch(98.5% 0.002 247.8);
-  --surface-raised: oklch(100% 0 0);
-  --surface-overlay: oklch(96.5% 0.005 247.8);
-  --surface-sunken: oklch(94.5% 0.008 247.8);
-  --border-subtle: oklch(89.5% 0.008 247.8);
-  --border-strong: oklch(78.5% 0.015 247.8);
-
-  /* Content / Foreground */
-  --text-primary: oklch(18.5% 0.02 247.8);
-  --text-secondary: oklch(42.5% 0.02 247.8);
-  --text-tertiary: oklch(62.5% 0.015 247.8);
-
-  /* Primary Brand Accent (Calibrated) */
-  --brand-primary: oklch(52.5% 0.18 250);
-  --brand-primary-hover: oklch(47.5% 0.18 250);
-  --brand-surface: oklch(94% 0.04 250);
-}
-
-[data-theme="dark"] {
-  /* Neutral surfaces (Dark mode — Warm luminance) */
-  --surface-base: oklch(14.5% 0.008 247.8);
-  --surface-raised: oklch(18.5% 0.008 247.8);
-  --surface-overlay: oklch(22.5% 0.01 247.8);
-  --surface-sunken: oklch(11.5% 0.006 247.8);
-  --border-subtle: oklch(26.5% 0.01 247.8);
-  --border-strong: oklch(36.5% 0.015 247.8);
-
-  /* Content / Foreground */
-  --text-primary: oklch(96.5% 0.005 247.8);
-  --text-secondary: oklch(74.5% 0.015 247.8);
-  --text-tertiary: oklch(54.5% 0.015 247.8);
-
-  /* Primary Brand Accent */
-  --brand-primary: oklch(68.5% 0.16 250);
-  --brand-primary-hover: oklch(74.5% 0.16 250);
-  --brand-surface: oklch(24% 0.06 250);
-}
-```
-
----
-
-## 3. Optical Typography & Tabular Numerals
-
-- **Font Pairing:** Use clear typographic hierarchy with appropriate optical sizing, letter-spacing (tracking), and line heights (leading).
-- **Tabular Lining Numerals:** All data tables, statistics, counters, financial numbers, dates, and timestamps MUST use tabular figures:
-  ```css
-  .tabular-nums, .num {
-    font-variant-numeric: tabular-nums lining-nums;
-  }
-  ```
-
----
-
-## 4. Physics & Spring Animation Tokens
-
-Avoid generic `transition: all 0.3s ease`. Use physically modeled, critically damped springs or exact micro-timings:
-
-| Interaction Type | Timing / Physics | Easing / Formula |
-| :--- | :--- | :--- |
-| **Micro-hover (Button, Card)** | $120\text{ms}$ | `cubic-bezier(0.16, 1, 0.3, 1)` |
-| **Modal / Dialog Entrance** | Spring | `stiffness: 340, damping: 28` (Start from `scale(0.96)`, not `scale(0)`) |
-| **Dropdown / Popover** | Spring | `stiffness: 400, damping: 30` |
-| **Keyboard Navigation** | $0\text{ms}$ | Instantaneous |
-
-### Reduced Motion Compliance (WCAG 2.2)
-All animated components must respect user OS accessibility preferences:
-```css
-@media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-```
-
----
-
-## 5. Touch & Focus Targets (Accessibility)
-- **Minimum Interactive Touch Target:** $\ge 44 \times 44\text{px}$ on touch devices.
-- **Focus Rings:** Distinct, high-contrast, non-obscured focus rings on `:focus-visible` (`outline: 2px solid var(--brand-primary); outline-offset: 2px;`).
+- **Spring Physics:** Animate strictly `transform` and `opacity` using critically damped springs (`stiffness: 340, damping: 28, mass: 0.8`) or micro-transitions (`<= 150ms`).
+- **Reduced Motion:** Wrap all React motion components in `useReducedMotion()` and respect `@media (prefers-reduced-motion: reduce)`.
+- **Touch & Focus Targets:** Minimum `44x44px` interactive hit areas and explicit `2px` focus-visible rings.

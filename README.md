@@ -1,92 +1,80 @@
-# AI Spec-Driven Development (SDD) Enterprise Starter Template
+# Enterprise AI Spec-Driven Development (SDD v5.0 + OpenSpec) Starter Template
 
-> **A battle-tested, high-craft boilerplate for engineering software with AI coding agents (Antigravity, Claude Code, Cursor, Codex, Gemini).**
-
-This repository provides a standardized architecture for **Spec-Driven Development (SDD)**, strict multi-agent governance, visual anti-slop guidelines, canonical Admin CMS patterns, autonomous browser QA verification, and persistent cross-session memory.
+> **A production-hardened, polyglot-ready engineering template for building software with autonomous AI coding agents (Antigravity, Claude Code, Codex, Cursor).**
+> Optimized first for **Next.js 16 + React 19 + TypeScript + Drizzle/SQL** while natively supporting **Python 3.12+ (`pytest`, `ruff`, FastAPI/Pydantic)**, **Go**, **Rust**, and **Mobile (Capacitor / Android)**.
 
 ---
 
-## 🏗️ Repository Architecture
+## Architecture & Governance Landmarks
 
 ```
 .
 ├── .agents/
-│   ├── rules/                              # Modular rules triggered automatically by context
-│   │   ├── 000-core-invariants.mdc         # Strict typing, bounded queries, zero placeholders
-│   │   ├── 001-code-craft-and-style.mdc    # Code style, comment integrity, requirement tags
-│   │   ├── 002-testing-and-triangulation.mdc# TDD triangulation, zero test weakening
-│   │   ├── 003-ui-ux-craftsmanship.mdc     # Anti-slop UI tokens, spring physics, typography
-│   │   ├── 004-security-and-data-isolation.mdc# Input validation (Zod), isolation boundaries
-│   │   ├── 005-api-and-contracts.mdc       # Structured API error envelopes, HTTP status rules
-│   │   ├── 006-admin-cms-pattern.mdc       # Standard self-management CMS architecture & schemas
-│   │   └── 007-browser-qa-verification.mdc # Autonomous browser QA (Mobile 375px & Desktop 1440px)
-│   └── skills/                             # Agent capability packs
-│       ├── spec-driven-development/        # 5-Phase SDD lifecycle skill
-│       ├── frontend-craftsmanship/         # High-craft visual and motion guidelines
-│       ├── test-driven-development/        # TDD Triangulation & test integrity
-│       └── accessibility-wcag/             # WCAG 2.2 Level AA auditing
-├── docs/
-│   ├── ARCHITECTURE.md                     # System architecture, tech stack & data topology
-│   ├── CLIENT_REQUIREMENTS.md              # Client brief, proposal deliverables & scope boundaries
-│   ├── specs/                              # Formal functional specifications (EARS + BDD)
-│   │   ├── README.md                       # Specification authoring guide
-│   │   └── SPEC-TEMPLATE.md                # Standard spec template with REQ-XX tags
-│   ├── design/                             # Technical design documents (TDD / ADR)
-│   │   ├── README.md                       # Design doc guidelines
-│   │   └── DESIGN-DOC-TEMPLATE.md          # Architecture, Mermaid diagrams & threat modeling
-│   └── reviews/
-│       └── CODE-REVIEW-TEMPLATE.md         # Multi-perspective AI code review checklist
+│   ├── .test-hashes.json                   # Cryptographic SHA-256 test-locking snapshot
+│   ├── agents/pr-reviewer/                 # Multi-PR triage & senior code review subagent
+│   ├── rules/                              # Glob-scoped modular rules (alwaysApply: false)
+│   │   ├── 000-core-invariants.mdc
+│   │   ├── 001-code-craft-and-style.mdc
+│   │   ├── 002-testing-and-triangulation.mdc
+│   │   ├── 003-ui-ux-craftsmanship.mdc
+│   │   ├── 004-security-and-data-isolation.mdc
+│   │   ├── 005-api-and-contracts.mdc
+│   │   ├── 006-admin-cms-pattern.mdc
+│   │   ├── 007-browser-qa-verification.mdc
+│   │   └── 008-database-and-persistence.mdc
+│   └── skills/                             # 21 high-craft skills + OpenSpec commands
+│       ├── spec-driven-development/        # SDD v5.0 + OpenSpec master skill
+│       ├── deliberate/                     # Anti-slop UI design + runnable static checker
+│       ├── next-best-practices/            # 19 Next.js 16 reference guides
+│       ├── next-cache-components/          # PPR, use cache, cacheLife, cacheTag
+│       ├── drizzle/                        # Drizzle ORM schema & query patterns
+│       ├── accessibility/                  # WCAG 2.2 AA auditing & patterns
+│       ├── animate/ & apple-design/        # Spring physics & fluid motion
+│       └── openspec-*/                     # /opsx:explore, propose, apply, sync, archive
+├── openspec/
+│   ├── config.yaml                         # OpenSpec project schema & rules
+│   └── specs/core/spec.md                  # Living domain specifications (EARS + BDD)
+├── qa/
+│   ├── catalog.ts                          # Incremental Agent QA scenario registry
+│   ├── state-catalog.ts                    # Semantic state matrix (loading/empty/error/...)
+│   └── cli.test.mjs                        # Automated QA catalog & state contract checks
 ├── scripts/
-│   ├── test-locking-guard.mjs              # Test assertion integrity checker (no .skip/.only)
-│   └── verify-fast.mjs                     # Pre-flight fast verification runner
-├── .github/
-│   ├── workflows/ci.yml                    # Automated GitHub Actions CI verification
-│   ├── PULL_REQUEST_TEMPLATE.md            # Pull request template with DoD checklist
-│   └── ISSUE_TEMPLATE/                     # Formal feature & bug issue templates
-├── AGENTS.md                               # Canonical AI governance protocol & system directives
-├── CONSTITUTION.md                         # Non-negotiable foundational system laws & boundaries
-├── DESIGN.md                               # OKLCH design tokens, spring physics & UI anti-slop rules
-├── PLAN.md                                 # Active session memory, dependency DAG & handoff ledger
-├── SPEC.md                                 # Executive pre-code functional contract (3-minute approval)
-└── package.json                            # Pre-configured verification scripts
+│   ├── verify-fast.mjs                     # <3s pre-flight (SHA-256 + TS/Python + Unit + OpenSpec)
+│   ├── verify-test-hashes.mjs              # SHA-256 cryptographic test-locking engine
+│   ├── test-locking-guard.mjs              # Zero-bypass guard (.skip / .only / pytest.skip)
+│   ├── run-unit-tests.mjs                  # Node 22 native test runner + Python pytest runner
+│   ├── qa.mjs                              # On-demand incremental Agent QA launcher
+│   ├── scan-staged-secrets.mjs             # Pre-commit credential leak blocker
+│   └── verify-commit-msg.mjs               # Spanish Conventional Commits validator
+├── tests/
+│   └── harness-integrity.test.mjs          # Sealed baseline verification test suite
+├── AGENTS.md                               # Canonical AI Agent Governance Protocol (v5.0)
+├── CLAUDE.md                               # @AGENTS.md pointer for Claude Code
+├── DESIGN.md                               # Structured OKLCH design tokens & typography
+├── GATES.md                                # Tree 3 Reliability, Concurrency & Data Integrity gates
+├── PLAN.md                                 # Active work & structured handoff ledger
+└── SPEC.md                                 # Executive pre-code functional contract
 ```
 
 ---
 
-## 🚀 How to Use in a New or Existing Project
+## Quickstart
 
-### Option A: Initialize via GitHub Template (Recommended)
-1. Go to [`https://github.com/CEOUBB/ai-development-template`](https://github.com/CEOUBB/ai-development-template).
-2. Click **"Use this template"** $\rightarrow$ **"Create a new repository"**.
-3. Clone your new repo locally and start building.
-
-### Option B: Terminal Creation via GitHub CLI
 ```bash
-gh repo create my-new-project --template CEOUBB/ai-development-template --private
-cd my-new-project
+pnpm install
+pnpm run verify:fast
+pnpm run qa:check
+pnpm qa --list --json
 ```
 
 ---
 
-## 🤖 Prompting AI Agents: The 3-Step Initialization
+## Verification Pipeline & Git Hooks (`simple-git-hooks`)
 
-When starting a project with an AI agent, follow this 3-step sequence:
-
-### Step 1: Ingest Client Requirements & Architecture
-> *"Read `docs/CLIENT_REQUIREMENTS.md` and `docs/ARCHITECTURE.md`. Fill out the client brief, deliverables, and technical stack for our new project."*
-
-### Step 2: Generate the Pre-Code Contract (`SPEC.md`)
-> *"Based on `docs/CLIENT_REQUIREMENTS.md`, generate `SPEC.md` with all data schemas (Zod), API contracts, and admin CMS field mappings. Do NOT write application code yet."*
-
-### Step 3: Review, Approve, and Implement
-> *(You review `SPEC.md` in 3 minutes, approve it, then prompt:)*
-> *"I have approved `SPEC.md`. Initialize `PLAN.md` with the dependency DAG and begin implementation following the 5-phase SDD pipeline."*
-
----
-
-## 🛡️ Non-Negotiable Invariants Built-In
-- **Zero Placeholders:** No `// TODO` or partial diffs.
-- **Test-Locking Invariant:** Agents cannot weaken or delete existing assertions to pass tests.
-- **Anti-Slop Design:** No flat black (`#000000`) with neon accents, no continuous gradient text fills, no generic pulsing badges.
-- **Traceability:** Every requirement has a corresponding `// Implements: REQ-XX` in code and tests.
-- **Browser QA Enforcement:** Mandatory verification on Mobile ($375\text{px}$) and Desktop ($1440\text{px}$) with 0 red console errors.
+| Command                      | Gate Description                                                                                               |
+| :--------------------------- | :------------------------------------------------------------------------------------------------------------- |
+| `pnpm run format`            | Formats the repository with Prettier (mandatory before staging/committing).                                    |
+| `pnpm run verify:fast`       | Runs SHA-256 test-locking guard, TypeScript/Python checks, unit tests, and `openspec validate --specs`.        |
+| `pnpm run verify:invariants` | Verifies zero `.skip()`/`.only()` bypasses and SHA-256 test integrity.                                         |
+| `pnpm run qa:check`          | Validates that every feature in `qa/catalog.ts` has complete semantic state coverage in `qa/state-catalog.ts`. |
+| `pnpm qa`                    | Executes registered Web/API/CLI/Python QA scenarios and writes `qa-results/<run>/index.html`.                  |

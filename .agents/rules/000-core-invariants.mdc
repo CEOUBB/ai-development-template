@@ -1,18 +1,12 @@
 ---
-description: Universal core invariants, strict typing, zero placeholders, and bounded query requirements
-globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.py", "**/*.go", "**/*.rs"]
+description: "Core engineering invariants: strict static typing, bounded queries, and zero placeholders"
+globs: "**/*.{ts,tsx,js,mjs,py,go,rs}"
+alwaysApply: false
 ---
 
-# 000 — Core Invariants & Strict Quality Constraints
+# Governance Rule 000: Core Invariants
 
-## 1. Zero Placeholders & Truncated Code
-- NEVER emit code containing `// TODO`, `/* rest of code */`, `// ...`, or partial diff snippets.
-- Every generated file, function, and test must be complete, functional, and compilable immediately.
-
-## 2. Strict Type Safety & No Bypasses
-- NEVER use `any`, `@ts-ignore`, `@ts-nocheck`, or blind type assertions (`as unknown as T`).
-- Always validate external inputs using deterministic runtime parsers (Zod, Valibot, Pydantic, etc.).
-
-## 3. Strict Query Bounding
-- NEVER execute unbounded database queries (`SELECT *` without `.limit()`).
-- All collection scans, search queries, and table reads must define explicit pagination limits (default $\le 50$) and indexed sort orders.
+1. **Zero Placeholders:** Never emit `// TODO`, `# TODO`, `/* rest of code */`, or partial diffs. Every code block must be complete and production-ready.
+2. **Strict Type Safety:** Never use `any`, `@ts-ignore`, or `# type: ignore` without a deterministic runtime parser (Zod in TypeScript, Pydantic in Python).
+3. **Bounded Queries:** Every database query or collection retrieval MUST specify an explicit `.limit(N)` and pagination cursor.
+4. **Traceability:** Tag every implemented requirement with `// Implements: REQ-XX` (or `# Implements: REQ-XX` in Python).

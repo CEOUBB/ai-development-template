@@ -8,6 +8,7 @@
 ---
 
 ## 1. Executive Summary & Problem Statement
+
 - **Problem Statement:** [Describe the problem, user pain point, or technical debt being addressed].
 - **Proposed Solution:** [High-level summary of what this specification introduces].
 - **Success Metrics:** [Measurable KPIs or criteria defining success].
@@ -15,6 +16,7 @@
 ---
 
 ## 2. Invariants & Scope Boundaries
+
 - **In Scope:**
   - [Explicit item 1]
   - [Explicit item 2]
@@ -30,6 +32,7 @@
 ## 3. Formal Requirements (EARS Syntax)
 
 ### `REQ-01`: [Requirement Title]
+
 - **Statement (EARS):** When [Trigger], the system shall [Action].
 - **Acceptance Criteria (BDD / Given-When-Then):**
   - **Scenario 1 (Happy Path):**
@@ -44,6 +47,7 @@
 ---
 
 ### `REQ-02`: [Requirement Title — Error Handling]
+
 - **Statement (EARS):** If [Invalid input or unauthorized access occurs], then the system shall [Reject with structured error].
 - **Acceptance Criteria (BDD):**
   - **Scenario 1 (Validation Failure):**
@@ -54,6 +58,7 @@
 ---
 
 ## 4. Security, Authorization & Privacy Invariants
+
 - **Authentication Requirement:** [Public / Authenticated / Role-restricted].
 - **Data Protection:** [PII handling, hashing, encryption at rest/in-transit].
 - **Rate Limiting / Abuse Prevention:** [Limits per minute/user/IP].
@@ -63,6 +68,6 @@
 ## 5. Traceability Matrix
 
 | Requirement ID | Specification Section | Unit Test File | Implementation Target |
-| :--- | :--- | :--- | :--- |
-| `REQ-01` | Section 3 (`REQ-01`) | `tests/...` | `lib/...` |
-| `REQ-02` | Section 3 (`REQ-02`) | `tests/...` | `app/...` |
+| :------------- | :-------------------- | :------------- | :-------------------- |
+| `REQ-01`       | Section 3 (`REQ-01`)  | `tests/...`    | `lib/...`             |
+| `REQ-02`       | Section 3 (`REQ-02`)  | `tests/...`    | `app/...`             |

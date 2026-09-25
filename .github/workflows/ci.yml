@@ -1,27 +1,41 @@
-name: CI Verification & Invariants Guard
+name: Enterprise SDD Verification CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
   verify:
-    name: Fast Verification & Test-Locking Check
+    name: Fast Verification, SHA-256 Test-Locking & Agent QA
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.5.2
+
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "22"
+          cache: "pnpm"
 
-      - name: Run Test-Locking Integrity Guard
-        run: node scripts/test-locking-guard.mjs
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Run Fast Verification Pipeline
-        run: node scripts/verify-fast.mjs
+      - name: Check Code Formatting (Prettier)
+        run: pnpm run format:check
+
+      - name: Run Fast Verification Gate (SHA-256 + Typecheck + Unit Tests + OpenSpec)
+        run: pnpm run verify:fast
+
+      - name: Run Incremental Agent QA Contract Check
+        run: pnpm run qa:check && pnpm qa

@@ -1,24 +1,11 @@
-# Pull Request — Definition of Done (DoD) Verification
+## Resumen del Cambio (Conventional Commits en Español)
 
-## 1. Traceability & Requirements
-<!-- List all requirements from docs/specs/ fulfilled by this PR -->
-- [ ] Requirements traceability markers added: `// Implements: REQ-XX`
-- [ ] Associated Specification: `docs/specs/SPEC-XXX.md`
-- [ ] Associated Design Doc: `docs/design/DESIGN-DOC-XXX.md`
+- **Especificación / Requerimientos:** `// Implements: REQ-XX`
+- **Escenario QA actualizado (`qa/catalog.ts`):** `<area.feature>`
 
-## 2. Invariants & Negative Constraints
-- [ ] **No Placeholders:** Zero `// TODO`, `/* rest of code */`, or truncated snippets.
-- [ ] **Test-Locking Invariant:** Zero test assertions deleted, weakened, or skipped in `tests/`.
-- [ ] **Type Safety:** No unvalidated `any`, `@ts-ignore`, or unchecked casts.
-- [ ] **Bounded Queries:** All database/data queries include explicit `.limit(N)` bounds.
-- [ ] **Single Source of Truth (SSOT):** Business rules reside in canonical domain modules.
+## Lista de Verificación (Definition of Done)
 
-## 3. High-Craft Visual Governance (If UI changes included)
-- [ ] Uses OKLCH surface and border tokens (`DESIGN.md`).
-- [ ] No flat `#000000` + neon glows or continuous gradient text.
-- [ ] Includes `prefers-reduced-motion` fallbacks for all animations.
-- [ ] Numeric data, dates, and tables use `font-variant-numeric: tabular-nums`.
-
-## 4. Verification
-- [ ] `npm run verify:fast` passes locally (exit code 0).
-- [ ] `PLAN.md` updated with task status and handoff ledger.
+- [ ] `pnpm run format:check` termina con código `0`.
+- [ ] `pnpm run verify:fast` pasa con código `0` (Typecheck + Unit Tests + SHA-256 Test-Locking + OpenSpec).
+- [ ] `pnpm run qa:check` y `pnpm qa` verifican los estados semánticos registrados en `qa/state-catalog.ts`.
+- [ ] `PLAN.md` ha sido actualizado con las notas de entrega (handoff).

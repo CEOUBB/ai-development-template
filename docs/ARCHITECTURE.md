@@ -39,16 +39,16 @@ graph TD
 
 ## 2. Standard Technology Stack
 
-| Layer | Standard Selection | Rationale / Guidelines |
-| :--- | :--- | :--- |
-| **Framework** | Next.js (App Router) / Vite SPA | React Server Components for SEO + client components for interactive UI |
-| **Language** | TypeScript (Strict mode) | Compile-time type safety with zero `any` policy |
-| **Styling** | Vanilla CSS / Tailored CSS Tokens | OKLCH color spaces, spring physics, zero CSS bloat |
-| **Validation** | Zod / Valibot | Runtime validation at all API and form boundaries |
-| **Database** | LibSQL (Turso) / PostgreSQL | Lightweight, relational, serverless-ready with strict indexing |
-| **ORM / Query** | Drizzle ORM / Kysely | Type-safe SQL builder with explicit `.limit()` enforcement |
-| **Object Storage**| Cloudflare R2 / S3 / Supabase | S3-compatible, edge-distributed media uploads with WebP optimization |
-| **Testing** | Node Test Runner / Vitest | Sub-second execution with test-locking guards |
+| Layer              | Standard Selection                | Rationale / Guidelines                                                 |
+| :----------------- | :-------------------------------- | :--------------------------------------------------------------------- |
+| **Framework**      | Next.js (App Router) / Vite SPA   | React Server Components for SEO + client components for interactive UI |
+| **Language**       | TypeScript (Strict mode)          | Compile-time type safety with zero `any` policy                        |
+| **Styling**        | Vanilla CSS / Tailored CSS Tokens | OKLCH color spaces, spring physics, zero CSS bloat                     |
+| **Validation**     | Zod / Valibot                     | Runtime validation at all API and form boundaries                      |
+| **Database**       | LibSQL (Turso) / PostgreSQL       | Lightweight, relational, serverless-ready with strict indexing         |
+| **ORM / Query**    | Drizzle ORM / Kysely              | Type-safe SQL builder with explicit `.limit()` enforcement             |
+| **Object Storage** | Cloudflare R2 / S3 / Supabase     | S3-compatible, edge-distributed media uploads with WebP optimization   |
+| **Testing**        | Node Test Runner / Vitest         | Sub-second execution with test-locking guards                          |
 
 ---
 

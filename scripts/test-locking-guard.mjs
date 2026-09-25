@@ -1,75 +1,79 @@
-#!/usr/bin/env node
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
 
-/**
- * test-locking-guard.mjs
- * 
- * Verifies that test assertions in `tests/` have not been weakened, commented out,
- * or deleted to artificially force test suites to pass.
- */
-
-import { execSync } from 'node:child_process';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join } from 'node:path';
-
+// Implements: REQ-CORE-01
 function findTestFiles(dir) {
-  let results = [];
-  try {
-    const list = readdirSync(dir);
-    for (const file of list) {
-      const fullPath = join(dir, file);
-      const stat = statSync(fullPath);
-      if (stat && stat.isDirectory()) {
-        results = results.concat(findTestFiles(fullPath));
-      } else if (file.endsWith('.test.ts') || file.endsWith('.test.js') || file.endsWith('.spec.ts') || file.endsWith('.spec.js')) {
-        results.push(fullPath);
-      }
-    }
-  } catch {
-    // Directory might not exist yet
+  if (!existsSync(dir)) {
+    return [];
   }
+
+  let results = [];
+  const list = readdirSync(dir);
+
+  for (const file of list) {
+    if (file === "__pycache__" || file === "node_modules") {
+      continue;
+    }
+
+    const fullPath = join(dir, file);
+    const stat = statSync(fullPath);
+
+    if (stat && stat.isDirectory()) {
+      results = results.concat(findTestFiles(fullPath));
+    } else if (
+      file.endsWith(".test.ts") ||
+      file.endsWith(".test.mjs") ||
+      file.endsWith(".test.js") ||
+      file.endsWith(".spec.ts") ||
+      file.endsWith("_test.py") ||
+      (file.startsWith("test_") && file.endsWith(".py"))
+    ) {
+      results.push(fullPath);
+    }
+  }
+
   return results;
 }
 
 function checkBypasses(filePath) {
-  const content = readFileSync(filePath, 'utf-8');
-  const lines = content.split('\n');
+  const content = readFileSync(filePath, "utf8");
+  const lines = content.split("\n");
   const violations = [];
 
   lines.forEach((line, index) => {
-    if (/\.skip\s*\(/.test(line)) {
-      violations.push(`Line ${index + 1}: Found '.skip()' in test suite.`);
+    const trimmed = line.trim();
+    if (trimmed.startsWith("//") || trimmed.startsWith("#")) {
+      return;
     }
-    if (/\.only\s*\(/.test(line)) {
-      violations.push(`Line ${index + 1}: Found '.only()' in test suite.`);
+
+    if (/\.(skip|only)\s*\(/.test(line)) {
+      violations.push(`Line ${index + 1}: Found '.skip()' or '.only()' bypass.`);
+    }
+    if (/(@pytest\.mark\.skip|unittest\.skip)/.test(line)) {
+      violations.push(`Line ${index + 1}: Found Python test skip decorator.`);
     }
   });
 
   return violations;
 }
 
-console.log('🔒 Running Test-Locking Integrity Guard...');
-
-const testFiles = findTestFiles('tests');
+const testFiles = [...findTestFiles("tests"), ...findTestFiles("qa")];
 let hasViolations = false;
-
-if (testFiles.length === 0) {
-  console.log('ℹ️  No test files found in tests/ yet. Guard passed.');
-  process.exit(0);
-}
 
 for (const file of testFiles) {
   const violations = checkBypasses(file);
   if (violations.length > 0) {
-    console.error(`❌ Test integrity violation in: ${file}`);
-    violations.forEach((v) => console.error(`   - ${v}`));
+    console.error(`[Test-Locking Guard] Violation in ${file}:`);
+    for (const v of violations) {
+      console.error(`  - ${v}`);
+    }
     hasViolations = true;
   }
 }
 
 if (hasViolations) {
-  console.error('\n💥 Test-Locking Guard failed! Remove .skip() or .only() to proceed.');
+  console.error("[Test-Locking Guard] Failed: Remove test skips or .only() filters.");
   process.exit(1);
-} else {
-  console.log('✅ Test-Locking Guard passed: No test bypasses detected.');
-  process.exit(0);
 }
+
+console.log(`[Test-Locking Guard] Passed (${testFiles.length} test files scanned, 0 bypasses).`);

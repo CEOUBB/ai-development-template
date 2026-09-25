@@ -1,20 +1,11 @@
 ---
-description: Test-driven development, triangulation discipline, and test-locking protection
-globs: ["tests/**/*", "**/*.test.*", "**/*.spec.*"]
+description: "TDD Red-Green-Refactor triangulation and SHA-256 cryptographic test-locking"
+globs: "tests/**,qa/**,**/*.test.*,**/test_*"
+alwaysApply: false
 ---
 
-# 002 — Testing & Triangulation Discipline
+# Governance Rule 002: Testing & SHA-256 Test-Locking
 
-## 1. Zero Test Weakening (Test-Locking Invariant)
-- You are strictly prohibited from weakening assertions, deleting test cases, adding `.skip()`, or widening numeric ranges in existing tests to bypass test failures.
-- If a test fails, fix the underlying production code to satisfy the contract.
-
-## 2. TDD Triangulation
-- Write tests in pairs:
-  1. Happy path (valid input produces expected valid output).
-  2. Boundary / Failure path (invalid, empty, overflow, or unauthorized input produces structured error).
-- Assert explicit outputs, not just non-null or truthy values.
-
-## 3. Deterministic Tests
-- Never rely on real clocks or random numbers without deterministic mocking or seeding.
-- Keep unit test suites execution time under 3 seconds.
+1. **Cryptographic Test-Locking:** All test files under `tests/` are sealed in `.agents/.test-hashes.json`. Weakening assertions, deleting test cases, or adding `.skip()` / `@pytest.mark.skip` is strictly forbidden.
+2. **Adding New Tests:** After authoring new tests in the RED phase and verifying they match the BDD specification, run `node scripts/verify-test-hashes.mjs --generate` to seal the new snapshot.
+3. **TDD Triangulation:** Test nominal paths, boundary edges (0, empty, max limits, NaN/null), and unauthorized/error paths for every requirement.

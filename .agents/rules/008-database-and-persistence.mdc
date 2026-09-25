@@ -1,0 +1,11 @@
+---
+description: "Relational database schemas, migrations, ACID transactions, and mandatory query pagination"
+globs: "db/**,drizzle/**,migrations/**,models/**,**/*.sql"
+alwaysApply: false
+---
+
+# Governance Rule 008: Database & Persistence (Drizzle / Turso / PostgreSQL / SQLAlchemy)
+
+1. **ACID Transactions:** Wrap any multi-table write or dependent foreign-key insertion in an explicit database transaction (`db.transaction(async (tx) => { ... })` or SQLAlchemy `async with session.begin():`).
+2. **Mandatory Pagination Bounds:** Every `SELECT` query MUST include an explicit `.limit(N)` clause (default 50, maximum 100) and an indexed sort key. Never filter full table dumps in memory.
+3. **Zero Destructive Drift:** Never run `DROP TABLE` or `DROP COLUMN` without an approved migration and rollback plan. Verify schema parity against production/staging.

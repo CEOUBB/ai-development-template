@@ -1,35 +1,13 @@
 ---
-description: Autonomous browser QA verification, viewport audits (Mobile 375px, Desktop 1440px), and console error checks
-globs: ["app/**/*", "src/**/*", "components/**/*", "views/**/*"]
+description: "Incremental On-Demand Agent QA (pnpm qa), semantic state coverage, and multi-viewport verification"
+globs: "qa/**,e2e/**,app/**,components/**,backend/**,scripts/qa*"
+alwaysApply: false
 ---
 
-# 007 — Autonomous Browser QA & Visual Verification
+# Governance Rule 007: Incremental On-Demand Agent QA (`pnpm qa`)
 
-## Purpose
-Ensures that all user interface implementations and visual changes are thoroughly validated in real browser rendering environments before any task is marked as complete.
-
----
-
-## 1. Mandatory Viewport Verification Matrix
-
-When building or modifying UI pages, components, or layouts, the agent must verify visual rendering across two standard viewports:
-
-| Viewport Target | Width $\times$ Height | Mandatory Checks |
-| :--- | :--- | :--- |
-| **Mobile Standard** | $375\text{px} \times 812\text{px}$ (iPhone SE / Standard Mobile) | - Zero horizontal scrollbar (`overflow-x: hidden`).<br>- Touch targets $\ge 44 \times 44\text{px}$.<br>- Hamburger / Mobile drawer opens smoothly.<br>- Text fits within screen bounds without truncation. |
-| **Desktop Standard** | $1440\text{px} \times 900\text{px}$ (Standard Desktop) | - Balanced whitespace and maximum content container width.<br>- Multi-column grids render with proper gap spacing.<br>- Hover states activate correctly. |
-
----
-
-## 2. Browser Verification Protocol
-
-Before declaring any frontend task done, execute this automated or browser inspection sequence:
-
-1. **Local Server Verification:** Ensure the development or preview server runs cleanly without compilation errors.
-2. **Console Error Audit:** Open the target route and inspect browser console logs.
-   - **Zero Red Errors:** There must be $0$ unhandled exceptions, hydration mismatches, missing React keys, or broken network 404s.
-3. **Interactive Flow Check:**
-   - Test form submissions (valid submission produces success toast/modal; invalid submission highlights errors).
-   - Test modal dialogs, drawers, and dropdown toggles.
-   - Test keyboard navigation (`Tab` cycle through interactive elements).
-4. **Visual Artifact Documentation:** When possible or requested, capture screenshot evidence of the rendered interface at both mobile and desktop viewports.
+1. **Mandatory QA Co-Evolution:** Whenever you add or modify a user-facing screen, API endpoint, or Python/CLI workflow, you MUST update `qa/catalog.ts` and `qa/state-catalog.ts` in the same task:
+   - Register a stable scenario ID (`area.feature`), its `kind` (`"web" | "api" | "cli" | "python"`), source file mappings, roles, and executable checkpoints.
+   - Register all applicable semantic states (`loading`, `empty`, `populated`, `error`, `forbidden`, `readonly`) in `qa/state-catalog.ts`.
+2. **Multi-Viewport & Accessibility Verification:** For web UI changes, verify across Mobile (`320px`, `390px`), Tablet (`768px`), and Desktop (`1440px`) viewports with zero `axe-core` WCAG 2.2 AA violations and zero red console errors.
+3. **Verification Gate:** Run `pnpm run qa:check` and `pnpm qa` before declaring any feature complete. Inspect `qa-results/<run>/index.html` and `summary.json`.

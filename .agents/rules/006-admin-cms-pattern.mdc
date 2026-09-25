@@ -1,58 +1,10 @@
 ---
-description: Canonical pattern for self-administrable Admin CMS panels, site content schemas, and media storage
-globs: ["app/admin/**/*", "src/admin/**/*", "components/admin/**/*", "lib/cms/**/*"]
+description: "Self-managed Admin CMS architecture, audit logging, and dual-store consistency"
+globs: "app/**/admin/**,components/**/admin/**,db/**"
+alwaysApply: false
 ---
 
-# 006 — Canonical Admin CMS & Self-Management Pattern
+# Governance Rule 006: Admin CMS & Audit Pattern
 
-## Purpose
-Establishes a standardized, highly maintainable pattern for building client-facing Admin CMS dashboards without reinventing bespoke architectures on every project.
-
----
-
-## 1. Data Model Invariants for Content Management
-
-All self-managed client websites must utilize a structured `site_content` storage pattern or normalized content tables:
-
-### 1.1 Key-Value / Section Storage Pattern
-```typescript
-// Standard schema for dynamic page sections
-export interface SiteContentSection<T = Record<string, unknown>> {
-  key: string;            // e.g. 'landing:hero', 'landing:about', 'footer:contact'
-  section: string;        // 'hero'
-  payload: T;             // Structured JSON object matching specific Zod schema
-  updatedAt: string;      // ISO timestamp
-  updatedBy?: string;     // User identifier
-}
-```
-
-### 1.2 Normalized Entities Pattern (Services, Portfolio, Testimonials, Leads)
-- Use standard relational tables with `id`, `title`, `description`, `imageUrl`, `order`, `isVisible`, and timestamps.
-- Always include `order INT DEFAULT 0` for manual sorting and `isVisible BOOLEAN DEFAULT true` for draft/published toggling.
-
----
-
-## 2. Standard Admin Component Suite
-
-When building the Admin CMS, construct views using these standard reusable components:
-
-1. **Inline / Form Text Editors:**
-   - Single-line title inputs with character counters.
-   - Textareas / Markdown editors for rich descriptions.
-2. **Media Uploader Component (`MediaUploadField`):**
-   - Drag-and-drop file target.
-   - Immediate client-side image preview and file size check ($\le 5\text{MB}$).
-   - Automated conversion/compression recommendation (WebP format).
-   - Integration with object storage API (Cloudflare R2 / S3 / Supabase Storage).
-3. **Visibility & Ordering Controls:**
-   - Toggle switch for `isVisible` status.
-   - Up/Down order reordering or draggable handle.
-4. **Toast Feedback:**
-   - Provide immediate visual confirmation upon save (`Saved successfully` / `Error updating content`).
-
----
-
-## 3. Security & Access Rules
-- Protect all `/admin/*` routes with server-side middleware and cryptographic session verification.
-- Prohibit hardcoded master passwords or bypass query parameters (e.g. `?admin=true`).
-- Sanitize all rendered HTML/Markdown to prevent Stored XSS attacks.
+1. **Server-Side Transactional Mutations:** Admin mutations must execute exclusively on the server inside ACID transactions. Never mutate secondary projections (e.g., Firestore/cache) directly from the client when the server endpoint already coordinates synchronization.
+2. **Append-Only Audit Trail:** Record an immutable audit log entry (`actorId`, `action`, `targetId`, `previousValue`, `newValue`, `timestamp`) for every administrative or privilege change.

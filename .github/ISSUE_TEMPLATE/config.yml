@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "🔒 Seguridad y Divulgación Responsable"
+    url: "https://github.com/CEOUBB/CEOUBB/security/policy"
+    about: "Para reportar vulnerabilidades de seguridad de forma privada y responsable (Ley 19.628 / 21.719)."

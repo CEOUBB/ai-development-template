@@ -1,0 +1,41 @@
+# Artefactos y compilados
+.next
+.open-next/
+cloudflare-env.d.ts
+dist
+build
+coverage
+.cache
+.qa
+qa-results
+playwright-report
+test-results
+.wrangler
+.vinext
+graphify-out
+
+# Directorios de agentes, skills y configuración local
+.agents
+.claude
+.codex
+.impeccable
+.grepai
+
+# Dependencias y bloqueos
+node_modules
+pnpm-lock.yaml
+
+# Proyectos nativos móviles y recursos estáticos
+android
+ios
+public/vendor
+
+# Bases de datos y archivos binarios
+*.db
+*.sqlite
+*.sqlite3
+local.db
+
+# Minificados
+*.min.js
+*.min.css

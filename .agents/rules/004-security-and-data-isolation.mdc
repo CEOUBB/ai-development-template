@@ -1,18 +1,11 @@
 ---
-description: Security invariants, boundary isolation, input validation, and credential protection
-globs: ["**/*"]
+description: "Authentication SSOT, tenant isolation, CSRF/origin validation, and secret protection"
+globs: "app/api/**,lib/**,db/**,firebase/**,backend/**,**/*.{ts,py}"
+alwaysApply: false
 ---
 
-# 004 — Security & Data Isolation
+# Governance Rule 004: Security & Data Isolation
 
-## 1. Zero Credential Leakage
-- Never log authorization tokens, passwords, cookies, or PII to console or telemetry.
-- Never hardcode personal addresses or secret keys into source code or security rules.
-
-## 2. Runtime Schema Validation
-- All boundary inputs (HTTP request bodies, query params, headers, webhooks, environment variables) MUST be validated with a strict runtime schema parser (e.g. Zod) before being processed.
-- Discard or reject unknown/extra fields by default (`.strict()` parsing).
-
-## 3. Multi-Tenant & Session Isolation
-- Always enforce tenant and user boundaries at the data query level (e.g. `WHERE tenant_id = ? AND user_id = ?`).
-- Prohibit wildcard administrative reads from public-facing endpoints.
+1. **Single Source of Truth (SSOT):** Centralize role derivation and permission checks in a single policy module. Never hardcode personal email addresses or secret keys in source code.
+2. **Defense in Depth on Mutations:** Enforce strict `Content-Length` / payload size bounds prior to JSON parsing, validate `Origin` headers against CSRF, and use constant-time comparisons (`crypto.timingSafeEqual` / `hmac.compare_digest`) for tokens and signatures.
+3. **Private Cache Headers:** Return `Cache-Control: private, no-store, max-age=0` and `Vary: Cookie` on all authenticated API endpoints.

@@ -1,20 +1,54 @@
 {
   "name": "ai-sdd-template",
-  "version": "1.0.0",
-  "description": "Enterprise-grade Spec-Driven Development (SDD) starter template for AI-assisted engineering",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Enterprise Spec-Driven Development (SDD v5.0 + OpenSpec) starter template for Web/Next.js and Polyglot (Python/Go/Rust) AI engineering",
+  "packageManager": "pnpm@10.5.2",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "type": "module",
   "scripts": {
+    "prepare": "simple-git-hooks",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "node scripts/run-unit-tests.mjs",
     "verify:fast": "node scripts/verify-fast.mjs",
-    "verify:invariants": "node scripts/test-locking-guard.mjs",
-    "test": "node scripts/verify-fast.mjs"
+    "verify:invariants": "node scripts/test-locking-guard.mjs && node scripts/verify-test-hashes.mjs --check",
+    "specs:validate": "openspec validate --specs",
+    "specs:status": "openspec list --specs",
+    "qa": "node --experimental-strip-types scripts/qa.mjs",
+    "qa:check": "node --experimental-strip-types --test qa/cli.test.mjs",
+    "doctor": "react-doctor",
+    "test": "node scripts/verify-fast.mjs && pnpm run qa:check"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@fission-ai/openspec": "^1.13.1",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.13.0",
+    "prettier": "^3.9.8",
+    "react-doctor": "^0.9.14",
+    "simple-git-hooks": "^2.14.0",
+    "typescript": "^5.8.2"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "node scripts/scan-staged-secrets.mjs && node scripts/verify-test-hashes.mjs --check && pnpm run verify:invariants",
+    "commit-msg": "node scripts/verify-commit-msg.mjs $1",
+    "pre-push": "pnpm run format:check && pnpm run verify:fast && pnpm run qa:check"
   },
   "keywords": [
     "sdd",
+    "openspec",
     "spec-driven-development",
     "ai-agent",
     "governance",
-    "testing",
-    "anti-slop"
+    "test-locking",
+    "agent-qa",
+    "anti-slop",
+    "nextjs",
+    "python"
   ],
   "license": "MIT"
 }

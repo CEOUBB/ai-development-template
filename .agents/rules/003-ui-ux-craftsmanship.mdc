@@ -1,24 +1,14 @@
 ---
-description: High-craft UI design, token governance, anti-slop, spring physics, and WCAG 2.2 accessibility
-globs: ["**/*.tsx", "**/*.jsx", "**/*.vue", "**/*.svelte", "**/*.css", "**/*.scss"]
+description: "High-craft UI design tokens (OKLCH), typography, spring physics, and anti-slop governance"
+globs: "app/**,components/**,src/**,**/*.{tsx,jsx,css,html},DESIGN.md"
+alwaysApply: false
 ---
 
-# 003 — UI/UX Craftsmanship & Anti-Slop Directives
+# Governance Rule 003: UI/UX Craftsmanship & Anti-Slop (DESIGN.md)
 
-## 1. Visual Slop Prohibition
-- DO NOT use flat `#000000` backgrounds with saturated neon accents (`violet-500`, `indigo-500`).
-- DO NOT use multi-color continuous gradient text fills (`bg-clip-text text-transparent`).
-- DO NOT use pulsing pill badges (`animate-ping`) or decorative emojis in component iconography.
-- DO NOT use oversized diffuse glowing shadows (`blur-3xl`).
-
-## 2. Design Tokens & Elevation
-- Consume semantic tokens from `DESIGN.md` (`var(--surface-base)`, `var(--surface-raised)`, `var(--text-primary)`).
-- Elevate components using 1px micro-borders and layered ambient shadows.
-
-## 3. Motion & Animation Physics
-- Never use generic `transition: all 0.3s ease`.
-- Target exact animated properties (`transform`, `opacity`) with critically damped spring physics (`stiffness: 340, damping: 28`) or micro-times ($\le 150\text{ms}$).
-- Wrap interactive animations in `prefers-reduced-motion` fallbacks.
-
-## 4. Typography & Numerals
-- Always apply `font-variant-numeric: tabular-nums lining-nums` (`.num`, `.tabular-nums`) to tables, financial amounts, counters, and dates.
+1. **OKLCH Surface Hierarchy:** Consume semantic tokens from `DESIGN.md`. Never use pure `#000000`, `bg-black`, or `bg-zinc-950` with neon purple/indigo accents.
+2. **No Decorative Slop:** No uppercase letterspaced eyebrow pills above headings, no glowing borders, no continuous gradient text (`bg-clip-text text-transparent`), and no decorative emojis (✨, 🚀, ⚡) as icons.
+3. **Motion & Accessibility (WCAG 2.2 AA):**
+   - Animate strictly `transform` and `opacity` using critically damped springs (`stiffness: 340, damping: 28`) or micro-transitions (`<= 150ms`). Never use `transition: all`.
+   - Wrap animated React components in `useReducedMotion()`. Start modal entrances from `scale(0.96)`, never `scale(0)`.
+4. **Numerals & Icons:** Apply `.num` (`font-variant-numeric: tabular-nums lining-nums`) to all numbers, tables, and dates. Use a single icon library (`@phosphor-icons/react`) exclusively.

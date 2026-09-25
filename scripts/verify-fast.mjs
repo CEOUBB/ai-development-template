@@ -1,47 +1,39 @@
-#!/usr/bin/env node
+import { execSync } from "node:child_process";
+import { existsSync } from "node:fs";
 
-/**
- * verify-fast.mjs
- * 
- * Executes fast (<3.0s) pre-flight verification:
- * 1. Test-locking integrity guard
- * 2. Type checking (if tsconfig exists)
- * 3. Unit tests
- */
-
-import { execSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-
-console.log('⚡ Starting Fast Pre-Flight Verification...\n');
-
-function runStep(name, command) {
-  console.log(`▶ [1/3] Running ${name}...`);
+// Implements: REQ-CORE-01
+function runStep(label, command) {
+  console.log(`▶ ${label}...`);
   try {
-    execSync(command, { stdio: 'inherit' });
-    console.log(`✔ ${name} passed.\n`);
-  } catch (err) {
-    console.error(`✖ ${name} failed!\n`);
+    execSync(command, { stdio: "inherit" });
+  } catch {
+    console.error(`✖ ${label} failed.`);
     process.exit(1);
   }
 }
 
-// 1. Guard check
-runStep('Test-Locking Integrity', 'node scripts/test-locking-guard.mjs');
+runStep(
+  "1/4 Test-Locking Guard & SHA-256 Integrity",
+  "node scripts/test-locking-guard.mjs && node scripts/verify-test-hashes.mjs --check"
+);
 
-// 2. Typecheck (if tsconfig.json exists)
-if (existsSync('tsconfig.json')) {
-  runStep('Typecheck', 'npx tsc --noEmit');
+if (existsSync("tsconfig.json")) {
+  runStep("2/4 TypeScript Typecheck", "pnpm exec tsc --noEmit");
 }
 
-// 3. Fast Tests (if configured in package.json)
-try {
-  const pkg = JSON.parse(existsSync('package.json') ? readFileSync('package.json', 'utf8') : '{}');
-  if (pkg.scripts && pkg.scripts['test:unit']) {
-    runStep('Unit Tests', 'npm run test:unit');
+if (existsSync("pyproject.toml") || existsSync("requirements.txt")) {
+  try {
+    execSync("ruff --version", { stdio: "ignore" });
+    runStep("2b/4 Python Ruff Check", "ruff check .");
+  } catch {
+    // ruff optional if not installed in environment
   }
-} catch {
-  // Pass if not configured
 }
 
-console.log('🎉 Fast Verification completed successfully!');
-process.exit(0);
+runStep("3/4 Unit Test Suites", "node scripts/run-unit-tests.mjs");
+
+if (existsSync("openspec/specs")) {
+  runStep("4/4 OpenSpec Living Specifications Validation", "pnpm exec openspec validate --specs");
+}
+
+console.log("✔ Fast verification completed cleanly.");

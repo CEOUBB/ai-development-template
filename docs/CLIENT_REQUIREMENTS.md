@@ -6,6 +6,7 @@
 ---
 
 ## 1. Client & Project Profile
+
 - **Client Name / Business:** [Business / Client Name]
 - **Industry / Domain:** [e.g. Health & Wellness, E-Commerce, Legal, SaaS, Education]
 - **Target Audience:** [Describe ideal end users and customer persona]
@@ -14,6 +15,7 @@
 ---
 
 ## 2. Agreed Deliverables & Scope Checklist
+
 <!-- List all agreed deliverables from the approved commercial proposal -->
 
 - [ ] **Public Web Experience:**
@@ -35,6 +37,7 @@
 ---
 
 ## 3. Brand Assets & Design Constraints
+
 - **Primary Brand Colors:** [Hex / OKLCH / Palette descriptions]
 - **Typography Preferences:** [Heading font / Body font]
 - **Brand Imagery / Logo:** [Location of brand assets in repository / cloud drive]
@@ -43,7 +46,9 @@
 ---
 
 ## 4. Explicit Scope Boundaries (Out of Scope)
+
 <!-- Prevent scope creep by explicitly recording non-goals -->
+
 - [ ] Payment gateway integration (unless specified in milestone 2).
 - [ ] Multi-language i18n localization (deferred to phase 2).
 - [ ] Native mobile apps (web-only PWA scope).

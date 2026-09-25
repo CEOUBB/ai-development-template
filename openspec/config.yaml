@@ -1,0 +1,38 @@
+schema: spec-driven
+
+context: |
+  Project: Enterprise AI-Assisted Software Application (Web / Next.js / Python / Polyglot).
+  Core Stack Capabilities:
+    - Web & UI: Next.js (App Router, React 19, TypeScript, Tailwind CSS v4, OKLCH tokens, Motion spring physics, Phosphor Icons).
+    - Polyglot & Backend Services: Node 22+ / TypeScript (Zod, Drizzle ORM) and/or Python 3.12+ (FastAPI, Pydantic, SQLAlchemy, pytest, ruff).
+    - Persistence (SoR): Relational database with ACID transactions and mandatory bounded pagination (.limit(N)).
+  Governance & Invariants:
+    - Every functional specification MUST use formal EARS syntax (SHALL, WHEN, WHILE, IF, WHERE).
+    - Every requirement MUST include executable BDD Given-When-Then (Gherkin) scenarios.
+    - Every implemented requirement MUST include '// Implements: REQ-XX' or '# Implements: REQ-XX' in source code.
+    - All tests in tests/ are protected by SHA-256 cryptographic test-locking (scripts/verify-test-hashes.mjs).
+    - Every new feature or route MUST update the incremental Agent QA harness (qa/catalog.ts and qa/state-catalog.ts).
+    - Commit messages and PR titles MUST be written in Spanish using Conventional Commits.
+
+rules:
+  proposal:
+    - Include executive summary, technical rationale, and explicit non-goals.
+  specs:
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD) in EARS requirements.
+    - Map BDD Gherkin scenarios 1:1 to executable assertions.
+  design:
+    - Include runtime validation schemas (Zod / Pydantic), Mermaid diagrams, and blast-radius analysis.
+  tasks:
+    - Decompose into an ordered DAG: Schemas/DB -> Domain Logic -> API/Service -> UI -> Agent QA.
+    - Include explicit verification commands (pnpm run verify:fast && pnpm run qa:check) on each milestone.
+
+operations:
+  apply:
+    guidance:
+      - Execute TDD cycles: RED (failing test) -> GREEN (minimal implementation) -> REFACTOR.
+      - Keep test files sealed under SHA-256 hashes (.agents/.test-hashes.json).
+      - Register new semantic states and scenarios in qa/catalog.ts and qa/state-catalog.ts.
+  archive:
+    guidance:
+      - Merge delta specs into canonical openspec/specs/.
+      - Verify full harness with pnpm run verify:fast and pnpm test.
